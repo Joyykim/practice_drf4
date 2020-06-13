@@ -4,10 +4,13 @@ from django.contrib import admin
 from cards.models import Card
 
 
-def report(request, queryset):
+def report(modeladmin, request, queryset):
     ids = [x for x in queryset.all()]
     count = queryset.update(is_reported=True)
     print('here:', ids, 'Count', count)
+
+
+report.short_description = 'report card'
 
 
 @admin.register(Card)
