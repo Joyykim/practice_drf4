@@ -26,9 +26,6 @@ class UserTestCase(APITestCase):
             self.assertEqual(user_response['id'], user.id)
             self.assertEqual(user_response['username'], user.username)
 
-        # 테스트 강제 fail
-        # self.fail()
-
     def test_should_create(self):
         data = {'username': 'new_one'}
         response = self.client.post('/api/users', data=data)
@@ -56,7 +53,7 @@ class UserTestCase(APITestCase):
         prev_username = user.username
 
         data = {"username": "new"}
-        self.client.force_authenticate(user=self.users[1])
+        self.client.force_authenticate(user=user)
         response = self.client.put(f'/api/users/{user.id}', data=data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

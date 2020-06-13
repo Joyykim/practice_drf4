@@ -14,9 +14,10 @@ class CardTestCase(APITestCase):
     # 모든 테스트 메소드의 실행 전에 실행됨!
     def setUp(self) -> None:
         self.users = baker.make('auth.User', _quantity=3)
-        self.cards = baker.make('cards.Card', _quantity=4, content='dsds', owner=self.users[0])
-        self.cards += baker.make('cards.Card', _quantity=4, content='dsds', owner=self.users[1])
-        self.cards += baker.make('cards.Card', _quantity=4, content='dsds', owner=self.users[2])
+        self.cards = []
+
+        for user in self.users:
+            self.cards += baker.make('cards.Card', _quantity=4, content='dsds', owner=user)
 
         self.user = self.users[1]
         self.card = Card.objects.filter(owner_id=self.user.id).first()
@@ -32,7 +33,7 @@ class CardTestCase(APITestCase):
             self.assertEqual(card_response['id'], card.id)
 
     def test_should_create(self):
-        data = {"content": "blah blah blah", "owner_id": self.user.id}
+        data = {"content": "blah blah blah"}
         self.client.force_authenticate(user=self.user)
         response = self.client.post('/api/cards', data=data)
 

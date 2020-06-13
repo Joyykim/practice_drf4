@@ -10,3 +10,6 @@ from cards.serializers import CardSerializer
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
