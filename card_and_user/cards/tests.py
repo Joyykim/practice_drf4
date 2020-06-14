@@ -33,7 +33,10 @@ class CardTestCase(APITestCase):
             self.assertEqual(card_response['id'], card.id)
 
     def test_should_create(self):
-        data = {"content": "blah blah blah"}
+        data = {
+            "title": "title~",
+            "content": "blah blah blah",
+        }
         self.client.force_authenticate(user=self.user)
         response = self.client.post('/api/cards', data=data)
 
@@ -42,7 +45,7 @@ class CardTestCase(APITestCase):
         card_response = Munch(response.data)
         self.assertTrue(card_response.id)
         self.assertEqual(card_response.content, data['content'])
-        self.assertEqual(card_response.owner, self.user.username)
+        self.assertEqual(card_response.owner, self.user.id)
 
     def test_should_retrieve(self):
         self.client.force_authenticate(user=self.user)
@@ -56,7 +59,10 @@ class CardTestCase(APITestCase):
 
     def test_should_update(self):
         prev_content = self.card.content
-        data = {"content": "new new blah blah blah"}
+        data = {
+            "title": "new title",
+            "content": "new new content blah blah",
+        }
 
         self.client.force_authenticate(user=self.user)
         response = self.client.put(f'/api/cards/{self.card.id}', data=data)
@@ -75,10 +81,8 @@ class CardTestCase(APITestCase):
 
         self.assertEqual(Card.objects.filter(pk=self.card.id).count(), 0)
 
-        # with self.assertRaises(Card.DoesNotExist):
-        #     User.objects.get(pk=self.card.id)
-
-        # self.fail()
+        with self.assertRaises(Card.DoesNotExist):
+            Card.objects.get(pk=self.card.id)
 
     # 커스텀 메소드 테스트
     # def test(self):
