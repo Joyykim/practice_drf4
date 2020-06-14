@@ -11,4 +11,4 @@ class CardSerializer(ModelSerializer):
 
     class Meta:
         model = Card
-        fields = ('id', 'content', 'owner')
+        fields = ('id', 'title', 'content', 'like', 'is_reported', 'owner')
